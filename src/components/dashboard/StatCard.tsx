@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface StatCardProps {
     title: string;
@@ -8,30 +9,71 @@ interface StatCardProps {
     color?: 'blue' | 'red' | 'green' | 'purple';
 }
 
-const colorClasses = {
-    blue: 'bg-blue-50 text-blue-600',
-    red: 'bg-red-50 text-red-600',
-    green: 'bg-green-50 text-green-600',
-    purple: 'bg-purple-50 text-purple-600',
+const accentColors = {
+    blue: { bg: 'var(--navy)', sealBg: 'linear-gradient(135deg, var(--navy-light), var(--navy))' },
+    red: { bg: 'var(--burgundy)', sealBg: 'linear-gradient(135deg, var(--burgundy-light), var(--burgundy))' },
+    green: { bg: 'var(--forest)', sealBg: 'linear-gradient(135deg, var(--forest-light), var(--forest))' },
+    purple: { bg: 'var(--wood)', sealBg: 'linear-gradient(135deg, var(--wood), var(--wood-dark))' },
 };
 
 export function StatCard({ title, value, subtitle, icon, color = 'blue' }: StatCardProps) {
+    const accent = accentColors[color];
+
     return (
-        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <motion.div
+            whileHover={{ y: -4, boxShadow: '0 8px 24px var(--shadow-warm), 0 0 20px var(--glow-gold)' }}
+            transition={{ duration: 0.3 }}
+            className="parchment-card p-5"
+            style={{ position: 'relative', overflow: 'hidden' }}
+        >
+            {/* Decorative corner */}
+            <div
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    width: 40,
+                    height: 40,
+                    background: `linear-gradient(135deg, transparent 50%, rgba(200,169,110,0.15) 50%)`,
+                }}
+            />
+
             <div className="flex items-start justify-between">
                 <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-500 mb-1 tracking-wide">{title}</p>
-                    <div className="flex items-baseline gap-2">
-                        <p className="text-3xl font-bold text-gray-900 tracking-tight">{value}</p>
-                    </div>
+                    <p
+                        className="font-ui text-xs font-semibold mb-2"
+                        style={{ color: 'var(--ink-light)', letterSpacing: '0.08em', textTransform: 'uppercase' }}
+                    >
+                        {title}
+                    </p>
+                    <p
+                        className="font-display text-3xl font-bold"
+                        style={{ color: 'var(--ink-dark)', letterSpacing: '0.02em' }}
+                    >
+                        {value}
+                    </p>
                     {subtitle && (
-                        <p className="text-xs text-gray-500 mt-2 font-medium">{subtitle}</p>
+                        <p
+                            className="font-ui text-xs mt-2"
+                            style={{ color: 'var(--ink-faded)' }}
+                        >
+                            {subtitle}
+                        </p>
                     )}
                 </div>
-                <div className={`p-3 rounded-xl ${colorClasses[color]} bg-opacity-60`}>
+                <div
+                    className="flex items-center justify-center rounded-full"
+                    style={{
+                        width: 44,
+                        height: 44,
+                        background: accent.sealBg,
+                        color: 'var(--parchment-light)',
+                        boxShadow: '0 2px 6px var(--shadow-warm)',
+                    }}
+                >
                     {icon}
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }

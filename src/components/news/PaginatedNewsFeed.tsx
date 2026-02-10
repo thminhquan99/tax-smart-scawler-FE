@@ -3,6 +3,7 @@ import { apiService } from '../../services/api';
 import { usePagination } from '../../hooks/usePagination';
 import { NewsFeed } from './NewsFeed';
 import { Pagination } from '../common/Pagination';
+import { BookOpen } from 'lucide-react';
 
 export function PaginatedNewsFeed() {
     const { page, pageSize, offset, setPage } = usePagination(1, 5);
@@ -14,10 +15,10 @@ export function PaginatedNewsFeed() {
 
     if (isLoading) {
         return (
-            <div className="animate-pulse space-y-4">
-                <div className="h-32 bg-gray-200 rounded-lg"></div>
-                <div className="h-32 bg-gray-200 rounded-lg"></div>
-                <div className="h-32 bg-gray-200 rounded-lg"></div>
+            <div className="space-y-4">
+                {[1, 2, 3].map(i => (
+                    <div key={i} className="skeleton-parchment" style={{ height: 120, borderRadius: 4 }} />
+                ))}
             </div>
         );
     }
@@ -27,8 +28,9 @@ export function PaginatedNewsFeed() {
 
     if (newsItems.length === 0) {
         return (
-            <div className="text-center py-12">
-                <p className="text-gray-500">Chưa có tin tức nào</p>
+            <div className="parchment-card p-12 text-center">
+                <BookOpen style={{ width: 32, height: 32, color: 'var(--gold-dark)', margin: '0 auto 12px' }} />
+                <p className="font-body" style={{ color: 'var(--ink-faded)' }}>Chưa có tin tức nào</p>
             </div>
         );
     }

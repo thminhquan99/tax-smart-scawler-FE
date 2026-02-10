@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { apiService } from '../services/api';
-import { ArrowLeft, ExternalLink, Calendar, Building2, AlertCircle, Lightbulb, CheckSquare, TrendingUp } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Calendar, Building2, AlertCircle, Lightbulb, CheckSquare, TrendingUp, Feather, Bookmark } from 'lucide-react';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
+import { motion } from 'framer-motion';
 
 export function NewsDetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -17,27 +18,23 @@ export function NewsDetailPage() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gray-50 p-6">
-                <div className="max-w-4xl mx-auto">
-                    <div className="h-8 bg-gray-200 rounded w-1/3 mb-6 animate-pulse" />
-                    <div className="bg-white rounded-xl p-8 space-y-4">
-                        {[1, 2, 3, 4].map(i => (
-                            <div key={i} className="h-24 bg-gray-200 rounded animate-pulse" />
-                        ))}
-                    </div>
-                </div>
+            <div className="max-w-5xl mx-auto space-y-6">
+                <div className="skeleton-parchment" style={{ height: 32, width: '30%' }} />
+                <div className="skeleton-parchment" style={{ height: 400 }} />
             </div>
         );
     }
 
     if (!article) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Không tìm thấy bài viết</h2>
+            <div className="flex items-center justify-center h-64">
+                <div className="parchment-card p-12 text-center">
+                    <h2 className="font-display text-xl font-bold mb-2" style={{ color: 'var(--ink-dark)' }}>
+                        Không tìm thấy bài viết
+                    </h2>
                     <button
-                        onClick={() => navigate('/dashboard')}
-                        className="text-blue-600 hover:text-blue-700"
+                        onClick={() => navigate('/')}
+                        className="btn-parchment mt-4"
                     >
                         Quay lại Dashboard
                     </button>
@@ -46,209 +43,428 @@ export function NewsDetailPage() {
         );
     }
 
-    const priorityColors = {
-        HIGH: 'bg-red-100 text-red-800 border-red-200',
-        MEDIUM: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-        LOW: 'bg-green-100 text-green-800 border-green-200',
+    const prioritySeals = {
+        HIGH: 'wax-seal-red',
+        MEDIUM: 'wax-seal-amber',
+        LOW: 'wax-seal-green',
     };
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="max-w-4xl mx-auto p-6 space-y-6">
-                {/* Header */}
-                <button
-                    onClick={() => navigate('/dashboard')}
-                    className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                    <ArrowLeft className="w-5 h-5" />
-                    Quay lại Dashboard
-                </button>
+        <div className="max-w-5xl mx-auto">
+            {/* Back Button */}
+            <motion.button
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={() => navigate('/')}
+                className="flex items-center gap-2 mb-6 font-ui text-sm transition-colors"
+                style={{
+                    color: 'var(--ink-light)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--wood)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ink-light)'; }}
+            >
+                <ArrowLeft style={{ width: 18, height: 18 }} />
+                Quay lại Dashboard
+            </motion.button>
 
-                {/* Article Header */}
-                <div className="bg-white rounded-xl border border-gray-200 p-8">
+            {/* ═══ Open Book Layout ═══ */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+                {/* Book Header */}
+                <div
+                    className="parchment-card p-6 mb-0"
+                    style={{
+                        borderBottom: 'none',
+                        borderBottomLeftRadius: 0,
+                        borderBottomRightRadius: 0,
+                    }}
+                >
                     <div className="flex items-start justify-between gap-4 mb-4">
-                        <h1 className="text-3xl font-bold text-gray-900 flex-1">{article.title}</h1>
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium border ${priorityColors[article.priority]}`}>
+                        <h1
+                            className="font-display text-2xl font-bold flex-1"
+                            style={{ color: 'var(--ink-dark)', lineHeight: 1.3 }}
+                        >
+                            {article.title}
+                        </h1>
+                        <span className={`wax-seal ${prioritySeals[article.priority]}`}>
                             {article.priority}
                         </span>
                     </div>
 
-                    <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6">
+                    <div className="flex flex-wrap gap-4 font-ui text-sm mb-4" style={{ color: 'var(--ink-light)' }}>
                         <div className="flex items-center gap-2">
-                            <Building2 className="w-4 h-4" />
+                            <Building2 style={{ width: 14, height: 14 }} />
                             <span>{article.sourceName}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
+                            <Calendar style={{ width: 14, height: 14 }} />
                             <span>{format(new Date(article.publishedAt), 'dd/MM/yyyy', { locale: vi })}</span>
                         </div>
                     </div>
 
                     {article.taxTypes && article.taxTypes.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-6">
+                        <div className="flex flex-wrap gap-2 mb-4">
                             {article.taxTypes.map(type => (
-                                <span key={type} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
+                                <span
+                                    key={type}
+                                    className="font-ui text-xs px-3 py-1 rounded"
+                                    style={{
+                                        background: 'rgba(200, 169, 110, 0.2)',
+                                        color: 'var(--wood-dark)',
+                                        border: '1px solid var(--parchment-dark)',
+                                    }}
+                                >
                                     {type}
                                 </span>
                             ))}
                         </div>
                     )}
 
-                    <p className="text-gray-700 leading-relaxed mb-6">{article.summary}</p>
+                    <p className="font-body" style={{ color: 'var(--ink-medium)', lineHeight: 1.7 }}>
+                        {article.summary}
+                    </p>
 
                     <a
                         href={article.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                        className="inline-flex items-center gap-2 mt-4 font-ui text-sm font-semibold transition-colors"
+                        style={{ color: 'var(--wood)' }}
                     >
-                        <ExternalLink className="w-4 h-4" />
+                        <ExternalLink style={{ width: 14, height: 14 }} />
                         Xem bài viết gốc
                     </a>
                 </div>
 
-                {/* Full Article Content */}
-                <div className="bg-white rounded-xl border border-gray-200 p-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">📄 Nội dung bài viết</h2>
-                    <div className="prose prose-gray max-w-none">
-                        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                            {article.fullContent}
-                        </p>
+                {/* ═══ Book Spread (Dual Page) ═══ */}
+                <div
+                    className="grid grid-cols-1 lg:grid-cols-3 gap-0"
+                    style={{
+                        background: 'linear-gradient(135deg, var(--paper-cream) 0%, var(--parchment-light) 100%)',
+                        border: '1px solid var(--parchment-dark)',
+                        borderTop: 'none',
+                        boxShadow: '0 4px 16px var(--shadow-warm)',
+                        position: 'relative',
+                    }}
+                >
+                    {/* Left Page - Article Content */}
+                    <div
+                        className="lg:col-span-2 p-8"
+                        style={{
+                            borderRight: '1px solid var(--parchment-dark)',
+                            position: 'relative',
+                        }}
+                    >
+                        {/* Book binding shadow (center line) */}
+                        <div
+                            style={{
+                                position: 'absolute',
+                                right: 0,
+                                top: 0,
+                                bottom: 0,
+                                width: 20,
+                                background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.06))',
+                                pointerEvents: 'none',
+                            }}
+                        />
+
+                        <h2
+                            className="font-display text-xl font-bold mb-6 flex items-center gap-2"
+                            style={{ color: 'var(--ink-dark)' }}
+                        >
+                            <Feather style={{ width: 18, height: 18, color: 'var(--gold-dark)' }} />
+                            Nội dung bài viết
+                        </h2>
+
+                        <div className="drop-cap">
+                            <p
+                                className="font-body text-base whitespace-pre-wrap"
+                                style={{ color: 'var(--ink-medium)', lineHeight: 1.8 }}
+                            >
+                                {article.fullContent}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Right Sidebar - Related Articles */}
+                    <div className="p-6" style={{ background: 'rgba(236, 219, 182, 0.3)' }}>
+                        <h3
+                            className="font-display text-sm font-bold mb-4"
+                            style={{ color: 'var(--ink-dark)', letterSpacing: '0.05em' }}
+                        >
+                            Related Articles
+                        </h3>
+                        {['Related Articles', 'Related Reading News', 'Related Articles', 'Related Articles'].map((label, idx) => (
+                            <div
+                                key={idx}
+                                className="parchment-card p-3 mb-3 text-center font-ui text-xs"
+                                style={{
+                                    color: 'var(--ink-medium)',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                {label}
+                            </div>
+                        ))}
+
+                        {/* Save Button */}
+                        <button
+                            className="w-full mt-6 flex items-center justify-center gap-2 btn-wood text-sm"
+                        >
+                            <Bookmark style={{ width: 14, height: 14 }} />
+                            Save
+                        </button>
                     </div>
                 </div>
+            </motion.div>
 
-                {/* Detailed Analysis */}
-                {article.detailedAnalysis ? (
-                    <div className="space-y-6">
-                        {/* Signals Section */}
-                        <div className="bg-white rounded-xl border border-gray-200 p-8">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-orange-100 rounded-lg">
-                                    <AlertCircle className="w-6 h-6 text-orange-600" />
-                                </div>
-                                <h2 className="text-2xl font-bold text-gray-900">Giải mã Tín hiệu</h2>
+            {/* ═══ Detailed Analysis ═══ */}
+            {article.detailedAnalysis ? (
+                <div className="space-y-6 mt-8">
+                    {/* Signals Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="parchment-card p-8"
+                    >
+                        <div className="flex items-center gap-3 mb-6">
+                            <div
+                                className="flex items-center justify-center rounded-full"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    background: 'linear-gradient(135deg, var(--amber), var(--amber-dark))',
+                                    boxShadow: '0 2px 6px var(--shadow-warm)',
+                                }}
+                            >
+                                <AlertCircle style={{ width: 20, height: 20, color: 'var(--paper-cream)' }} />
                             </div>
-
-                            <div className="space-y-6">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-3">📍 Điểm nóng pháp lý</h3>
-                                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{article.detailedAnalysis.signals.legalHotspots}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-3">🔍 Tác động ngầm</h3>
-                                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{article.detailedAnalysis.signals.hiddenImpacts}</p>
-                                </div>
-                            </div>
+                            <h2 className="font-display text-xl font-bold" style={{ color: 'var(--ink-dark)' }}>
+                                Giải mã Tín hiệu
+                            </h2>
                         </div>
 
-                        {/* Business Impact */}
-                        <div className="bg-white rounded-xl border border-gray-200 p-8">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-purple-100 rounded-lg">
-                                    <TrendingUp className="w-6 h-6 text-purple-600" />
-                                </div>
-                                <h2 className="text-2xl font-bold text-gray-900">Phân tích Tác động Doanh nghiệp</h2>
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="font-display text-base font-semibold mb-3" style={{ color: 'var(--ink-dark)' }}>
+                                    📍 Điểm nóng pháp lý
+                                </h3>
+                                <p className="font-body whitespace-pre-wrap" style={{ color: 'var(--ink-medium)', lineHeight: 1.7 }}>
+                                    {article.detailedAnalysis.signals.legalHotspots}
+                                </p>
                             </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-3">🏢 Đối tượng ảnh hưởng</h3>
-                                    <ul className="space-y-2">
-                                        {article.detailedAnalysis.businessImpact.affectedBusinessTypes.map((type, idx) => (
-                                            <li key={idx} className="flex items-start gap-2">
-                                                <span className="text-purple-600 mt-1">•</span>
-                                                <span className="text-gray-700">{type}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-3">⚠️ Vùng rủi ro</h3>
-                                    <ul className="space-y-2">
-                                        {article.detailedAnalysis.businessImpact.riskAreas.map((risk, idx) => (
-                                            <li key={idx} className="flex items-start gap-2">
-                                                <span className="text-red-600 mt-1">•</span>
-                                                <span className="text-gray-700">{risk}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                            <div>
+                                <h3 className="font-display text-base font-semibold mb-3" style={{ color: 'var(--ink-dark)' }}>
+                                    🔍 Tác động ngầm
+                                </h3>
+                                <p className="font-body whitespace-pre-wrap" style={{ color: 'var(--ink-medium)', lineHeight: 1.7 }}>
+                                    {article.detailedAnalysis.signals.hiddenImpacts}
+                                </p>
                             </div>
                         </div>
+                    </motion.div>
 
-                        {/* Tax Concepts */}
-                        <div className="bg-white rounded-xl border border-gray-200 p-8">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-green-100 rounded-lg">
-                                    <Lightbulb className="w-6 h-6 text-green-600" />
-                                </div>
-                                <h2 className="text-2xl font-bold text-gray-900">Concept Kế toán Thuế</h2>
+                    {/* Business Impact */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="parchment-card p-8"
+                    >
+                        <div className="flex items-center gap-3 mb-6">
+                            <div
+                                className="flex items-center justify-center rounded-full"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    background: 'linear-gradient(135deg, var(--navy-light), var(--navy))',
+                                    boxShadow: '0 2px 6px var(--shadow-warm)',
+                                }}
+                            >
+                                <TrendingUp style={{ width: 20, height: 20, color: 'var(--paper-cream)' }} />
                             </div>
+                            <h2 className="font-display text-xl font-bold" style={{ color: 'var(--ink-dark)' }}>
+                                Phân tích Tác động Doanh nghiệp
+                            </h2>
+                        </div>
 
-                            <div className="space-y-6">
-                                {article.detailedAnalysis.concepts.map((concept, idx) => (
-                                    <div key={idx} className="border border-gray-200 rounded-lg p-6 hover:border-green-300 transition-colors">
-                                        <h3 className="text-xl font-bold text-gray-900 mb-3">
-                                            {idx + 1}. {concept.name}
-                                        </h3>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 className="font-display text-base font-semibold mb-3" style={{ color: 'var(--ink-dark)' }}>
+                                    🏢 Đối tượng ảnh hưởng
+                                </h3>
+                                <ul className="space-y-2">
+                                    {article.detailedAnalysis.businessImpact.affectedBusinessTypes.map((type, idx) => (
+                                        <li key={idx} className="flex items-start gap-2">
+                                            <span style={{ color: 'var(--navy-light)', marginTop: 4 }}>•</span>
+                                            <span className="font-body" style={{ color: 'var(--ink-medium)' }}>{type}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 className="font-display text-base font-semibold mb-3" style={{ color: 'var(--ink-dark)' }}>
+                                    ⚠️ Vùng rủi ro
+                                </h3>
+                                <ul className="space-y-2">
+                                    {article.detailedAnalysis.businessImpact.riskAreas.map((risk, idx) => (
+                                        <li key={idx} className="flex items-start gap-2">
+                                            <span style={{ color: 'var(--wax-red)', marginTop: 4 }}>•</span>
+                                            <span className="font-body" style={{ color: 'var(--ink-medium)' }}>{risk}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </motion.div>
 
-                                        <div className="space-y-4">
-                                            <div>
-                                                <span className="text-sm font-semibold text-gray-600 uppercase">Mục tiêu</span>
-                                                <p className="text-gray-700 mt-1">{concept.objective}</p>
-                                            </div>
+                    {/* Tax Concepts */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                        className="parchment-card p-8"
+                    >
+                        <div className="flex items-center gap-3 mb-6">
+                            <div
+                                className="flex items-center justify-center rounded-full"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    background: 'linear-gradient(135deg, var(--forest-light), var(--forest))',
+                                    boxShadow: '0 2px 6px var(--shadow-warm)',
+                                }}
+                            >
+                                <Lightbulb style={{ width: 20, height: 20, color: 'var(--paper-cream)' }} />
+                            </div>
+                            <h2 className="font-display text-xl font-bold" style={{ color: 'var(--ink-dark)' }}>
+                                Concept Kế toán Thuế
+                            </h2>
+                        </div>
 
-                                            <div>
-                                                <span className="text-sm font-semibold text-gray-600 uppercase">Các bước thực hiện</span>
-                                                <ol className="mt-2 space-y-2">
-                                                    {concept.steps.map((step, stepIdx) => (
-                                                        <li key={stepIdx} className="flex items-start gap-3">
-                                                            <span className="shrink-0 w-6 h-6 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-sm font-medium">
-                                                                {stepIdx + 1}
-                                                            </span>
-                                                            <span className="text-gray-700 flex-1">{step}</span>
-                                                        </li>
-                                                    ))}
-                                                </ol>
-                                            </div>
+                        <div className="space-y-6">
+                            {article.detailedAnalysis.concepts.map((concept, idx) => (
+                                <div
+                                    key={idx}
+                                    className="parchment-card p-6"
+                                    style={{ borderLeft: '3px solid var(--forest)' }}
+                                >
+                                    <h3 className="font-display text-lg font-bold mb-3" style={{ color: 'var(--ink-dark)' }}>
+                                        {idx + 1}. {concept.name}
+                                    </h3>
 
-                                            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                                                <span className="text-sm font-semibold text-green-800 uppercase">Giá trị mang lại</span>
-                                                <p className="text-green-700 mt-1">{concept.value}</p>
-                                            </div>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <span className="font-ui text-xs font-bold uppercase" style={{ color: 'var(--ink-faded)', letterSpacing: '0.08em' }}>
+                                                Mục tiêu
+                                            </span>
+                                            <p className="font-body mt-1" style={{ color: 'var(--ink-medium)' }}>{concept.objective}</p>
+                                        </div>
+
+                                        <div>
+                                            <span className="font-ui text-xs font-bold uppercase" style={{ color: 'var(--ink-faded)', letterSpacing: '0.08em' }}>
+                                                Các bước thực hiện
+                                            </span>
+                                            <ol className="mt-2 space-y-2">
+                                                {concept.steps.map((step, stepIdx) => (
+                                                    <li key={stepIdx} className="flex items-start gap-3">
+                                                        <span
+                                                            className="flex-shrink-0 flex items-center justify-center font-ui text-xs font-bold rounded-full"
+                                                            style={{
+                                                                width: 24,
+                                                                height: 24,
+                                                                background: 'linear-gradient(135deg, var(--forest-light), var(--forest))',
+                                                                color: 'var(--paper-cream)',
+                                                            }}
+                                                        >
+                                                            {stepIdx + 1}
+                                                        </span>
+                                                        <span className="font-body flex-1" style={{ color: 'var(--ink-medium)' }}>{step}</span>
+                                                    </li>
+                                                ))}
+                                            </ol>
+                                        </div>
+
+                                        <div
+                                            className="p-4 rounded"
+                                            style={{
+                                                background: 'rgba(58, 122, 74, 0.08)',
+                                                border: '1px solid rgba(58, 122, 74, 0.2)',
+                                            }}
+                                        >
+                                            <span className="font-ui text-xs font-bold uppercase" style={{ color: 'var(--forest)', letterSpacing: '0.08em' }}>
+                                                Giá trị mang lại
+                                            </span>
+                                            <p className="font-body mt-1" style={{ color: 'var(--forest)' }}>{concept.value}</p>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Action Checklist */}
-                        <div className="bg-white rounded-xl border border-gray-200 p-8">
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="p-2 bg-blue-100 rounded-lg">
-                                    <CheckSquare className="w-6 h-6 text-blue-600" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-gray-900">Checklist Hành động Ngay</h2>
-                            </div>
-
-                            <div className="space-y-3">
-                                {article.detailedAnalysis.actionChecklist.map((action, idx) => (
-                                    <div key={idx} className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                        <CheckSquare className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                                        <span className="text-gray-900">{action}</span>
-                                    </div>
-                                ))}
-                            </div>
+                            ))}
                         </div>
-                    </div>
-                ) : (
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 text-center">
-                        <AlertCircle className="w-12 h-12 text-yellow-600 mx-auto mb-3" />
-                        <p className="text-yellow-800 font-medium">Phân tích chi tiết đang được tạo...</p>
-                        <p className="text-yellow-700 text-sm mt-2">Vui lòng quay lại sau vài phút</p>
-                    </div>
-                )}
-            </div>
+                    </motion.div>
+
+                    {/* Action Checklist */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                        className="parchment-card p-8"
+                    >
+                        <div className="flex items-center gap-3 mb-6">
+                            <div
+                                className="flex items-center justify-center rounded-full"
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    background: 'linear-gradient(135deg, var(--navy-light), var(--navy))',
+                                    boxShadow: '0 2px 6px var(--shadow-warm)',
+                                }}
+                            >
+                                <CheckSquare style={{ width: 20, height: 20, color: 'var(--paper-cream)' }} />
+                            </div>
+                            <h2 className="font-display text-xl font-bold" style={{ color: 'var(--ink-dark)' }}>
+                                Checklist Hành động Ngay
+                            </h2>
+                        </div>
+
+                        <div className="space-y-3">
+                            {article.detailedAnalysis.actionChecklist.map((action, idx) => (
+                                <div
+                                    key={idx}
+                                    className="flex items-start gap-3 p-4 rounded"
+                                    style={{
+                                        background: 'rgba(58, 80, 128, 0.06)',
+                                        border: '1px solid rgba(58, 80, 128, 0.15)',
+                                    }}
+                                >
+                                    <CheckSquare style={{ width: 18, height: 18, color: 'var(--navy-light)', flexShrink: 0, marginTop: 2 }} />
+                                    <span className="font-body" style={{ color: 'var(--ink-dark)' }}>{action}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+            ) : (
+                <div
+                    className="parchment-card p-8 text-center mt-8"
+                    style={{ border: '1px solid var(--amber)' }}
+                >
+                    <AlertCircle style={{ width: 40, height: 40, color: 'var(--amber-dark)', margin: '0 auto 12px' }} />
+                    <p className="font-display font-semibold" style={{ color: 'var(--amber-dark)' }}>
+                        Phân tích chi tiết đang được tạo...
+                    </p>
+                    <p className="font-body text-sm mt-2" style={{ color: 'var(--ink-faded)' }}>
+                        Vui lòng quay lại sau vài phút
+                    </p>
+                </div>
+            )}
         </div>
     );
 }

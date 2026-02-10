@@ -4,6 +4,8 @@ import { Layout } from './components/layout/Layout';
 import { Dashboard } from './pages/Dashboard';
 import { AnalysisDetail } from './pages/AnalysisDetail';
 import { NewsDetailPage } from './pages/NewsDetailPage';
+import { NewsFeedPage } from './pages/NewsFeedPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 const queryClient = new QueryClient({
@@ -23,8 +25,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Dashboard />} />
-              <Route path="analysis/:id" element={<AnalysisDetail />} />
+              <Route path="news" element={<NewsFeedPage />} />
               <Route path="news/:id" element={<NewsDetailPage />} />
+              <Route path="analysis/:id" element={<AnalysisDetail />} />
+              <Route path="analytics" element={<Dashboard />} />
+              <Route path="settings" element={<SettingsPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>

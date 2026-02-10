@@ -16,20 +16,27 @@ export function Pagination({ currentPage, totalItems, pageSize, onPageChange }: 
     const canGoNext = currentPage < totalPages;
 
     return (
-        <div className="flex items-center justify-between border-t border-gray-200 pt-4 mt-6">
-            <div className="text-sm text-gray-700">
-                Showing <span className="font-medium">{(currentPage - 1) * pageSize + 1}</span> to{' '}
-                <span className="font-medium">{Math.min(currentPage * pageSize, totalItems)}</span> of{' '}
-                <span className="font-medium">{totalItems}</span> results
+        <div
+            className="flex items-center justify-between pt-5 mt-6"
+            style={{ borderTop: '1px solid var(--parchment-dark)' }}
+        >
+            <div
+                className="font-ui text-sm"
+                style={{ color: 'var(--ink-light)' }}
+            >
+                Showing <span className="font-semibold" style={{ color: 'var(--ink-dark)' }}>{(currentPage - 1) * pageSize + 1}</span> to{' '}
+                <span className="font-semibold" style={{ color: 'var(--ink-dark)' }}>{Math.min(currentPage * pageSize, totalItems)}</span> of{' '}
+                <span className="font-semibold" style={{ color: 'var(--ink-dark)' }}>{totalItems}</span> results
             </div>
 
             <div className="flex items-center gap-2">
                 <button
                     onClick={() => onPageChange(currentPage - 1)}
                     disabled={!canGoPrev}
-                    className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="btn-parchment inline-flex items-center gap-1 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={{ padding: '8px 14px' }}
                 >
-                    <ChevronLeft className="w-4 h-4" />
+                    <ChevronLeft style={{ width: 16, height: 16 }} />
                     Previous
                 </button>
 
@@ -50,10 +57,27 @@ export function Pagination({ currentPage, totalItems, pageSize, onPageChange }: 
                             <button
                                 key={pageNum}
                                 onClick={() => onPageChange(pageNum)}
-                                className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${currentPage === pageNum
-                                        ? 'bg-blue-600 text-white'
-                                        : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
-                                    }`}
+                                className="font-display text-sm rounded transition-all"
+                                style={{
+                                    width: 36,
+                                    height: 36,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    background: currentPage === pageNum
+                                        ? 'linear-gradient(135deg, var(--wood) 0%, var(--wood-dark) 100%)'
+                                        : 'var(--paper-cream)',
+                                    color: currentPage === pageNum
+                                        ? 'var(--gold-light)'
+                                        : 'var(--ink-medium)',
+                                    border: currentPage === pageNum
+                                        ? '1px solid var(--gold-dark)'
+                                        : '1px solid var(--parchment-dark)',
+                                    boxShadow: currentPage === pageNum
+                                        ? '0 2px 8px var(--shadow-warm), 0 0 10px var(--glow-gold)'
+                                        : '0 1px 3px var(--shadow-warm)',
+                                }}
                             >
                                 {pageNum}
                             </button>
@@ -64,10 +88,11 @@ export function Pagination({ currentPage, totalItems, pageSize, onPageChange }: 
                 <button
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={!canGoNext}
-                    className="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="btn-parchment inline-flex items-center gap-1 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                    style={{ padding: '8px 14px' }}
                 >
                     Next
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight style={{ width: 16, height: 16 }} />
                 </button>
             </div>
         </div>
