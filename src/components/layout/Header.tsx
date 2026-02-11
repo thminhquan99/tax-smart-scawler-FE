@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Newspaper, BarChart3, Settings, Search, Menu, X } from 'lucide-react';
-import { DotLottiePlayer } from '@dotlottie/react-player';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -35,7 +35,7 @@ export function Header({ onSearchClick }: HeaderProps) {
                     {/* Logo */}
                     <div className="flex items-center gap-3">
                         <div className="p-0 rounded overflow-hidden" style={{ width: 64, height: 64 }}>
-                            <DotLottiePlayer
+                            <DotLottieReact
                                 src="/animations/Book.lottie"
                                 autoplay
                                 speed={0.5}
