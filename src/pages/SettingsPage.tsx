@@ -32,7 +32,7 @@ export function SettingsPage() {
                     </div>
                     <div>
                         <h1 className="font-display text-sm" style={{ color: 'var(--ink-faded)', letterSpacing: '0.08em' }}>
-                            Magical Library News Archive
+                            Tax Library News Archive
                         </h1>
                     </div>
                 </div>

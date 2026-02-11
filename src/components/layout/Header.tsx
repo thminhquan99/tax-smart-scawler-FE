@@ -45,7 +45,7 @@ export function Header({ onSearchClick }: HeaderProps) {
                         </div>
                         <div className="hidden sm:block">
                             <h1 className="font-display text-lg text-gold-light leading-tight">
-                                Magical Library
+                                Tax Library
                             </h1>
                             <p className="font-display text-[0.65rem] text-gold-dark tracking-[0.15em] uppercase">
                                 News Archive

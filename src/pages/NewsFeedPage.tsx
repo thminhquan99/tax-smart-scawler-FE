@@ -33,7 +33,7 @@ export function NewsFeedPage() {
                     className="font-display text-3xl font-bold"
                     style={{ color: 'var(--ink-dark)' }}
                 >
-                    Magical Library News Archive
+                    Tax Library News Archive
                 </h2>
                 <p
                     className="font-body text-base mt-2"
