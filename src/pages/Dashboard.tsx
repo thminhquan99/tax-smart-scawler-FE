@@ -70,39 +70,6 @@ export function Dashboard() {
                 </div>
                 <WeekSelector selectedWeek={selectedWeek} onWeekChange={setSelectedWeek} />
             </motion.div>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <StatCard
-                    title="New Documents"
-                    value={stats?.totalDocuments || 0}
-                    subtitle={`${stats?.newDocuments || 0} entirely new`}
-                    icon={<FileText style={{ width: 20, height: 20 }} />}
-                    color="blue"
-                />
-                <StatCard
-                    title="High Priority"
-                    value={stats?.highPriorityChanges || 0}
-                    subtitle="Critical changes"
-                    icon={<AlertCircle style={{ width: 20, height: 20 }} />}
-                    color="red"
-                />
-                <StatCard
-                    title="Total Changes"
-                    value={stats?.totalChanges || 0}
-                    subtitle="Across all docs"
-                    icon={<TrendingUp style={{ width: 20, height: 20 }} />}
-                    color="green"
-                />
-                <StatCard
-                    title="Industries"
-                    value={stats?.affectedIndustries?.length || 0}
-                    subtitle="Affected sectors"
-                    icon={<BarChart style={{ width: 20, height: 20 }} />}
-                    color="purple"
-                />
-            </div>
-
             {/* Recent Activity & Topics Compass Row */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 {/* Recent Activity */}
