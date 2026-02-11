@@ -1,8 +1,12 @@
 import axios from 'axios';
 import type { NewsArticle } from '../types/news';
 
-// Default to localhost:3001 if env var is missing
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+// Get API URL from environment variable
+const API_BASE = import.meta.env.VITE_API_URL;
+
+if (!API_BASE) {
+    throw new Error('VITE_API_URL environment variable is not set. Please configure it in your .env file.');
+}
 
 const api = axios.create({
     baseURL: API_BASE,
