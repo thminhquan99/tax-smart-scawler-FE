@@ -33,7 +33,7 @@ export function NewsFeedPage() {
                     className="font-display text-3xl font-bold"
                     style={{ color: 'var(--ink-dark)' }}
                 >
-                    Tax Library News Archive
+                    Những kiến thức thuế được tổng hợp và phân tích
                 </h2>
                 <p
                     className="font-body text-base mt-2"

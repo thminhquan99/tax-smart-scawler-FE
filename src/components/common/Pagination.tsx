@@ -17,11 +17,11 @@ export function Pagination({ currentPage, totalItems, pageSize, onPageChange }: 
 
     return (
         <div
-            className="flex items-center justify-between pt-5 mt-6"
+            className="flex flex-col sm:flex-row items-center justify-between pt-5 mt-6 gap-4 sm:gap-0"
             style={{ borderTop: '1px solid var(--parchment-dark)' }}
         >
             <div
-                className="font-ui text-sm"
+                className="font-ui text-sm text-center sm:text-left w-full sm:w-auto"
                 style={{ color: 'var(--ink-light)' }}
             >
                 Showing <span className="font-semibold" style={{ color: 'var(--ink-dark)' }}>{(currentPage - 1) * pageSize + 1}</span> to{' '}
@@ -29,7 +29,7 @@ export function Pagination({ currentPage, totalItems, pageSize, onPageChange }: 
                 <span className="font-semibold" style={{ color: 'var(--ink-dark)' }}>{totalItems}</span> results
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center w-full sm:w-auto gap-2">
                 <button
                     onClick={() => onPageChange(currentPage - 1)}
                     disabled={!canGoPrev}

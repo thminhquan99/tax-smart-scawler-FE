@@ -192,9 +192,9 @@ export function Dashboard() {
             </div>
 
             {/* Main Content - 2 Sections */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
                 {/* Analysis Section */}
-                <motion.div
+                {/* <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
@@ -227,7 +227,7 @@ export function Dashboard() {
                             )}
                         </>
                     )}
-                </motion.div>
+                </motion.div> */}
 
                 {/* News Section */}
                 <motion.div
